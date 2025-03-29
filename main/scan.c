@@ -58,7 +58,7 @@ void arpScan(void *param) {
     deviceInfos = calloc(maxSubnetDevice, sizeof(deviceInfo));
     if(deviceInfos == NULL){
         ESP_LOGI(TAG, "Not enough space for storing information");
-        return;
+        vTaskDelete(NULL);
     }
 
     /* Loop start... */
