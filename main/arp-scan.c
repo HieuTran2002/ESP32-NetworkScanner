@@ -46,14 +46,14 @@ void app_main(void)
         &ScanTask);
 
     // create LED Blink task
-    TaskHandle_t LEDBlinkTask = NULL;
-    xTaskCreate(
-        LED_Blink,
-        "LED_BLINK",
-        2048,
-        NULL,
-        tskIDLE_PRIORITY,
-        &LEDBlinkTask);
+    // TaskHandle_t LEDBlinkTask = NULL;
+    // xTaskCreate(
+    //     LED_Blink,
+    //     "LED_BLINK",
+    //     2048,
+    //     NULL,
+    //     tskIDLE_PRIORITY,
+    //     &LEDBlinkTask);
 
     // start web server
     start_webserver();

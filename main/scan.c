@@ -18,7 +18,7 @@
 // Define
 #define TAG "SCAN"
 #define ARPTIMEOUT 5000
-#define ARP_TABLE_SIZE 5
+#define ARP_TABLE_SIZE 255
 
 // functions
 uint32_t switch_ip_orientation (uint32_t *);
@@ -76,7 +76,7 @@ void arpScan(void *param) {
 
         // scan loop for 5 at a time
         while(target_ip.addr != last_ip.addr){
-            esp_ip4_addr_t currAddrs[5]; // save current loop ip
+            esp_ip4_addr_t currAddrs[ARP_TABLE_SIZE]; // save current loop ip
             int currCount = 0; // for checking Arp table use
 
             // send ARP request in batches ARP table has limit size
@@ -87,7 +87,7 @@ void arpScan(void *param) {
                     currAddrs[i] = target_ip;
                     ESP_LOGI(TAG, "Success sending ARP to %s", char_target_ip);
 
-                    etharp_request(netif, &target_ip);
+                    etharp_request(netif, (ip4_addr_t*)&target_ip);
                     currCount++;
                 }
                 else break; // ip is last ip in subnet then break
@@ -102,14 +102,14 @@ void arpScan(void *param) {
                 char mac[20], char_currIP[IP4ADDR_STRLEN_MAX];
 
                 unsigned int currentIpCount = switch_ip_orientation(&currAddrs[i].addr) - switch_ip_orientation(&target_ipp.addr) - 1; // calculate No. of ip
-                if(etharp_find_addr(NULL, &currAddrs[i], &eth_ret, &ipaddr_ret) != -1){ // find in ARP table
+                if(etharp_find_addr(NULL, (const ip4_addr_t *)&currAddrs[i], &eth_ret, (const ip4_addr_t **)&ipaddr_ret) != -1){ // find in ARP table
                     // print MAC result for ip
                     sprintf(mac, "%02X:%02X:%02X:%02X:%02X:%02X",eth_ret->addr[0],eth_ret->addr[1],eth_ret->addr[2],eth_ret->addr[3],eth_ret->addr[4],eth_ret->addr[5]);
                     esp_ip4addr_ntoa(&currAddrs[i], char_currIP, IP4ADDR_STRLEN_MAX);
                     ESP_LOGI(TAG, "%s's MAC address is %s", char_currIP, mac);
 
                     // stroing information to database
-                    deviceInfos[currentIpCount] = (deviceInfo){1, currAddrs[i].addr}; // storing online status and ip address specified by ip No.
+                    deviceInfos[currentIpCount] = (deviceInfo){1, currAddrs[i].addr, {0}};
                     memcpy(deviceInfos[currentIpCount].mac, eth_ret->addr, 6); // storing mac address into database specified by ip No.
 
                     // count total online device

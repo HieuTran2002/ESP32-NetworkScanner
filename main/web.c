@@ -161,7 +161,7 @@ char * createOnlineBox(uint32_t num){
     esp_ip4addr_ntoa(&ip, char_ip, IP4ADDR_STRLEN_MAX);
 
     // create char MAC
-    char *char_mac = MAC2Char(&getDeviceInfos()[num].mac);
+    char *char_mac = MAC2Char(getDeviceInfos()[num].mac);
 
 
     sprintf(onlineBox, CHAR_ONLINE_BOX, char_ip, char_mac);
@@ -193,7 +193,7 @@ char * createPrevOnlineBox(uint32_t num){
     esp_ip4addr_ntoa(&ip, char_ip, IP4ADDR_STRLEN_MAX);
 
     // create char MAC
-    char *char_mac = MAC2Char(&getDeviceInfos()[num].mac);
+    char *char_mac = MAC2Char(getDeviceInfos()[num].mac);
 
     sprintf(prevOnlineBox, CHAR_PREVONLINE_BOX, char_ip, char_mac);
     return prevOnlineBox;

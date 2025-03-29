@@ -25,8 +25,8 @@
 #define TCP_FAILURE 1 << 1
 #define MAX_FAILURES 10
 
-#define WIFI_SSID ""
-#define WIFI_PASSWORD ""
+#define WIFI_SSID "HCTL"
+#define WIFI_PASSWORD "123456789HCTL"
 
 /** GLOBALS **/
 
